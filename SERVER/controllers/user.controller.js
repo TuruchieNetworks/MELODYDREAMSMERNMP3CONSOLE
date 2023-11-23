@@ -27,51 +27,6 @@ module.exports.findOneSingleUser = (req, res) => {
 }
 
 // CREATE NEW
-// module.exports.createNewUser = (req, res) => {
-//   User.create(req.body)
-//     .then(user => {
-//       const userToken = jwt.sign({ id: user._id }, SECRET_KEY);
-//       res
-//         .cookie("usertoken", userToken, { httpOnly: true })
-//         .json({ msg: "User Successfully Identified!", user: { _id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName, avatar: user.avatar } });
-
-//     })
-//     .catch(err => res.json(err));
-// }
-
-
-
-// CREATE NEW
-// module.exports.createNewUser = (req, res) => {
-//   User.create(req.body)
-//   console.log(req.body)
-//     .then(user => {
-//       if (!user) {
-//         // Handle the case where user creation fails
-//         return res.status(500).json({ error: 'User creation failed' });
-//       }
-
-//       const userToken = jwt.sign(
-//         { id: user._id },
-//         process.env.SECRET_KEY
-//       );
-
-//       res.cookie( {
-//         userToken, 
-//         httpOnly: true,
-//         // Add other cookie options if needed (e.g., secure: true for HTTPS)
-//       })
-
-//       res.json({ msg: "success!", user: user });
-//     })
-//     .catch(err => {
-//       if (err.code === 11000) {
-//         // Duplicate key error (email already exists)
-//         return res.status(400).json({ error: 'Email is already in use.' });
-//       }
-//       res.status(500).json({ error: 'Internal Server Error' });
-//     });
-// };
 module.exports.createNewUser = (req, res) => {
   User.create(req.body)
     .then(user => {
@@ -88,7 +43,70 @@ module.exports.createNewUser = (req, res) => {
     .catch(err => res.json(err));
 }
 
+// ADD SONG
+module.exports.createNewSong = async (req, res) => {
+  try {
+    const { songName, songDescription, songArtist, genre, likes, songData } = req.body;
+    const userId = req.user._id; // incase of middleware setting req.user
 
+    await addSong(userId, { songName, songDescription, songArtist, genre, likes, ...songData });
+
+    res.json({ msg: 'Song added successfully' });
+  } catch (error) {
+    console.error('Error creating song:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+//  UPDATE SONG
+module.exports.createNewSong = async (req, res) => {
+  try {
+    const { title, description, owner, genre, likes, songImage } = req.body;
+    const userId = req.user._id;
+
+    // Get the file buffer from multer
+    const fileBuffer = req.file.buffer;
+
+    // Handle the file as needed (store in S3, save to disk, etc.)
+    // For simplicity, let's assume saving to disk
+    // You should replace this with your actual file storage logic
+    const filePath = `/path/to/save/${req.file.originalname}`;
+    // Save the file to disk or upload to S3
+
+    // Now, you can use filePath in your MongoDB update logic
+    const songData = {
+      title,
+      description,
+      owner,
+      genre,
+      likes,
+      songImage,
+      filePath, // Adjust this based on your file storage solution
+    };
+
+    await addSong(userId, songData);
+
+    res.json({ msg: 'Song added successfully' });
+  } catch (error) {
+    console.error('Error creating song:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+//  DELETE SONG
+module.exports.deleteExistingSong = (req, res) => {
+  User.song.deleteOne({ _id: req.params.id })
+    .then(result => {
+      res.json({ result: result })
+    })
+    .catch((err) => {
+      res.json(err)
+    });
+}
+
+//  UPDATE USER
 module.exports.updateExistingUser = (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },
@@ -116,45 +134,6 @@ module.exports.deleteAnExistingUser = (req, res) => {
 
 // EACH CRUDS INDIVIDUALLY EXPORTED!
 
-// module.exports.loginUser = async (req, res) => {
-//   const user = await User.findOne({ email: req.body.email });
-
-//   if (user === null) {
-//     // email not found in users collection
-//     return res.sendStatus(404);
-//   }
-
-//   // if we made it this far, we found a user with this email address
-//   // let's compare the supplied password to the hashed password in the database
-//   const correctPassword = await bcrypt.compare(req.body.password, user.password);
-
-//   if (!correctPassword) {
-//     // password wasn't a match!
-//     return res.sendStatus(401);
-//   }
-
-//   // if we made it this far, the password was correct
-//   // const userToken = jwt.sign({
-//   //   id: user._id
-//   // }, process.env.SECRET_KEY);
-
-//   const userToken = jwt.sign(
-//     { id: user._id },
-//     process.env.SECRET_KEY,
-//     { expiresIn: '1h' } // Set the expiration time as needed
-//   );
-
-//   // Define the 'secret' variable with an appropriate value
-//   const secret = 'your-secret-key'; // replace with your actual secret key
-
-//   // note that the response object allows chained calls to cookie and json
-//   res.cookie("usertoken", userToken, secret, {
-//     httpOnly: true
-//   })
-//     .json({ msg: "success!" });
-// }
-
-// LOGIN
 // LOGIN
 module.exports.loginUser = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
@@ -182,12 +161,6 @@ module.exports.loginUser = async (req, res) => {
   })
     .json({ msg: "success!" });
 }
-
-// // LOG OUT
-// module.exports.logout = (req, res) => {
-//   res.clearCookie('userToken');
-//   res.sendStatus(200);
-// }
 
 // LOG OUT
 module.exports.logout = (req, res) => {

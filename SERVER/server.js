@@ -1,15 +1,20 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT;
 const dbName = process.env.DB;
-// MIDDLEWARE
-// app.use(express.json({ extended: false })); // this allows to get data from req.body
-app.use(cookieParser());
+const multer = require('multer');
+const songController = require('./controllers/user.controller');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-// app.use(express.json(), express.urlencoded({ extended: true }), cors({ credentials: true, origin: 'http://localhost:3000' }));
+// Set up the storage for multer
+const storage = multer.memoryStorage(); // You can adjust this based on your needs
+const upload = multer({ storage: storage });
+
+// MIDDLEWARE
+app.use(cookieParser());
 
 app.use(
   express.json(),
@@ -17,16 +22,15 @@ app.use(
   cors({ credentials: true, origin: 'http://127.0.0.1:3000' })
 );
 
-// Change the app.use(cors()) to the one below
-// app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+// ROUTES
+const router = express.Router(); // Create a router instance
 
+// Attach the /songs route to the router
+router.post('/songs', authMiddleware.authenticate, upload.single('file'), userController.createNewSong);
 
-// require('./config/mongoose.config')(dbName);
+// Use the router in your app
+app.use('/api', router); // You can adjust the base path as needed
 
 require('./config/mongoose.config');
-
-// ROUTES
-require('./routes/user.routes')(app);
-
 
 app.listen(PORT, () => console.log(` >>>📡 API SERVICE ANNOUNCEMENT: 🎡🎠🎡 Server is up and running on port: ${PORT} and listening for REQuests to RESpond to 💻💻💻 >>>`));
