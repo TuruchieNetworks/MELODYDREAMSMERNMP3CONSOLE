@@ -111,43 +111,47 @@ const AddSong = ({ onUpload }) => {
                                     onChange={(e) => setFormData({ ...formData, songName: e.target.value })}
                                 />
                             </div>
-                            <div className="profilecontainer purple-circle-container form-group lead">
-                                <label className="purple-circle-containr" htmlFor="songArtist">
-                                    <p className="leadShowcase dark-card-cover purple-circle-container ">
-                                        <Link to="/AddSong" className="leadShowcase bluebtn " onMouseEnter={(e) => placeholderhover(e)}>
-                                            {placeholderSongOwner}
-                                        </Link>
-                                    </p>
+                            <div className="profilecontainer purple-circle-container form-group ">
+                                <div className="bluebtn">
+                                    <label className="purple-circle-container " htmlFor="songArtist">
+                                        <p className=" leadShowcase dark-card-cover">
+                                            <Link to="/AddSong" className="bluebtn dark-overlay" onMouseEnter={(e) => placeholderhover(e)}>
+                                                {placeholderSongOwner}
+                                            </Link>
+                                        </p>
+                                    </label>
                                     <input
                                         className="textShowcase"
                                         type="text"
                                         placeholder={placeholderSongOwner}
                                         value={formData.songArtst || ''}
                                         onChange={(e) => setFormData({ ...formData, songArtst: e.target.value })}
+                                    /></div>
+                            </div>
+
+                            <div className="profilecontainer purple-circle-container form-group">
+                                <div className='leadShowcase bluebtn dar-card-cover'>
+                                    <label className="bluebt dark-card-cover padding" htmlFor="songImage">
+                                        <p className="purple-circle-container">
+                                            <Link to="/AddSong" className="bluebtn leadShowcase dark-card-cover" onMouseEnter={(e) => placeholderhover(e)}>
+                                                <p className='leadShowcase dark-glo bluebtn dark-overlay'>{placeholderSongImage}</p>
+                                            </Link>
+                                        </p>
+                                    </label>
+                                    <input
+                                        className="textShowcase"
+                                        type="file"
+                                        placeholder={placeholderSongImage}
+                                        value={formData.songImage || ''}
+                                        onChange={(e) => setFormData({ ...formData, songImage: e.target.value })}
+                                        style={{ cursor: 'pointer' }}
                                     />
-                                </label>
+                                </div>
                             </div>
 
-                            <div className="profileTitle leadShowcase profilegrpbt profilecontainer dark-card-cover dark-overlay purple-circle-container form-group">
-                                <label className="dark-glow bluebtn dark-card-cover" htmlFor="songImage">
-                                    <p className="purple-circle-container padding">
-                                        <Link to="/AddSong" className="bluebtn leadShowcase dark-profile-overla dark-card-cover" onMouseEnter={(e) => placeholderhover(e)}>
-                                            {placeholderSongImage}
-                                        </Link>
-                                    </p>
-                                </label>
-                                <input
-                                    className="textShowcase"
-                                    type="file"
-                                    placeholder={placeholderSongImage}
-                                    value={formData.songImage || ''}
-                                    onChange={(e) => setFormData({ ...formData, songImage: e.target.value })}
-                                />
-                            </div>
-
-                            <div className="profilegrpbt form-group box-shadow purple-circle-container profilecontainer">
-                                <div className='dark-glow leadShowcase'>
-                                    <label className="bluebtn dark-glow purple-circle-container" htmlFor="description">
+                            <div className="form-group box-shadow purple-circle-container profilecontainer bluebtn">
+                                <div className='dark-card-cover leadShowcas'>
+                                    <label className="purple-circle-container" htmlFor="description">
                                         <p className="purple-circle-container">
                                             <Link to="/AddSong" className="dark-glow dark-card-cover lead" onMouseEnter={(e) => placeholderhover(e)}>
                                                 {placeholderSongDescription}
@@ -166,13 +170,20 @@ const AddSong = ({ onUpload }) => {
                                         style={{ cursor: 'pointer' }}
                                     />
 
-                                    <div className=" dark-overlay purple-circle-container form-group">
-                                        <p className="leadShowcase dark-glow purple-circle-container dark-card-cover dark-overlay">
+                                    <div className="purple-circle-container form-group">
+                                        <div className="dark-card-cover bluebtn leadShowcase">
+                                            <label className="" htmlFor="description">
+                                                <p className="purple-circle-container">
+                                                    <Link to="/AddSong" className="dark-glow dark-card-cover lead" onMouseEnter={(e) => placeholderhover(e)}>
+                                                        <p className=''>Please Select Song!</p>
+                                                    </Link>
+                                                </p>
+                                            </label>
+                                        <p className="leadShowcase dark-card-cover">
                                             <input className="textShowcase bluebtn" type="file" accept="audio/mp3" onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
                                         </p>
-                                        <div className=" purple-circle-container dark-card-cover dark-glo">
                                             <label className="bluebtn dark-glow leadShowcase dark-card-cover" htmlFor="description" >
-                                                <div className={statusClass}style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', fontSize: '16px' }}>
+                                                <div className={statusClass} style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', fontSize: '16px' }}>
                                                     <p className="textShowcase dark-card-cover dark-overly">{statusMsg}</p>
 
                                                     <input
@@ -199,13 +210,14 @@ const AddSong = ({ onUpload }) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="bluebtn margin-big">
-                                <p className="leadShowcase purple-circle-container ">
-                                    <button className="bluebtn leadShowcase dark-profile-overlay dark-card-cover my-1">
-                                        <p className="bluebtn lead">Upload Song!</p>
-                                    </button>
-                                </p>
+
+                                <div className="bluebtn margin-big">
+                                    <p className="leadShowcase purple-circle-container ">
+                                        <button className="bluebtn leadShowcase dark-profile-overlay dark-card-cover my-1">
+                                            <p className="bluebtn lead">Upload Song!</p>
+                                        </button>
+                                    </p>
+                                </div>
                             </div>
                         </form>
                     </div>
