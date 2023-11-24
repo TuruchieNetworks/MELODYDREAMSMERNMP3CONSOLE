@@ -43,69 +43,6 @@ module.exports.createNewUser = (req, res) => {
     .catch(err => res.json(err));
 }
 
-// ADD SONG
-module.exports.createNewSong = async (req, res) => {
-  try {
-    const { songName, songDescription, songArtist, genre, likes, songData } = req.body;
-    const userId = req.user._id; // incase of middleware setting req.user
-
-    await addSong(userId, { songName, songDescription, songArtist, genre, likes, ...songData });
-
-    res.json({ msg: 'Song added successfully' });
-  } catch (error) {
-    console.error('Error creating song:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-
-//  UPDATE SONG
-module.exports.createNewSong = async (req, res) => {
-  try {
-    const { title, description, owner, genre, likes, songImage } = req.body;
-    const userId = req.user._id;
-
-    // Get the file buffer from multer
-    const fileBuffer = req.file.buffer;
-
-    // Handle the file as needed (store in S3, save to disk, etc.)
-    // For simplicity, let's assume saving to disk
-    // You should replace this with your actual file storage logic
-    const filePath = `/path/to/save/${req.file.originalname}`;
-    // Save the file to disk or upload to S3
-
-    // Now, you can use filePath in your MongoDB update logic
-    const songData = {
-      title,
-      description,
-      owner,
-      genre,
-      likes,
-      songImage,
-      filePath, // Adjust this based on your file storage solution
-    };
-
-    await addSong(userId, songData);
-
-    res.json({ msg: 'Song added successfully' });
-  } catch (error) {
-    console.error('Error creating song:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-
-//  DELETE SONG
-module.exports.deleteExistingSong = (req, res) => {
-  User.song.deleteOne({ _id: req.params.id })
-    .then(result => {
-      res.json({ result: result })
-    })
-    .catch((err) => {
-      res.json(err)
-    });
-}
-
 //  UPDATE USER
 module.exports.updateExistingUser = (req, res) => {
   User.findOneAndUpdate(
@@ -164,7 +101,7 @@ module.exports.loginUser = async (req, res) => {
 
 // LOG OUT
 module.exports.logout = (req, res) => {
-  res.clearCookies('userToken');
+  res.clearCookie('userToken');
   res.sendStatus(200);
 }
 // notice that we're using the SECRET_KEY from our .env file

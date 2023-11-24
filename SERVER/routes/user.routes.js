@@ -1,4 +1,5 @@
 const UserController = require('../controllers/user.controller');
+const SongController = require('../controllers/song.controller');
 const { authenticate } = require('../config/jwt');
 
 module.exports = app => {
@@ -17,5 +18,5 @@ module.exports = app => {
   app.get('/api/songs', authenticate, SongController.findAllSongs);
   app.get('/api/songs/:id', authenticate, SongController.findOneSingleSong);
   app.patch('/api/songs/:id', authenticate, SongController.updateExistingSong);
-  app.delete('/api/songs/:id', authenticate, SongController.deleteAnExistingSong);
+  app.delete('/api/songs/:id', authenticate, SongController.deleteExistingSong);
 }

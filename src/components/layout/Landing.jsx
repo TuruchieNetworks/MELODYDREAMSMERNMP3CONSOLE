@@ -55,14 +55,14 @@ const Landing = () => {
   const [audioFileName, setAudioFileName] = useState(musicList[trackIndex].music);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/users')
-      .then((res) => {
-        setUser(res.data);
-        console.log('🚀🚀🚀', res.data);
+    axios.get('http://localhost:8000/api/users',
+      { withCredentials: true })
+      .then(res => {
+        setUser(res.data)
+        console.log('🚀🚀🚀', res.data)
       })
-      .catch((err) => {
-        console.log('🔭🎡🎡', err);
+      .catch(err => {
+        console.log('🔭🎡🎡', err)
       });
   }, []);
 
@@ -121,17 +121,17 @@ const Landing = () => {
       // Toggle logo between "MELODY DREAMS" and dynamic track information
       setDynamicLeadClasses((prevClasses) => {
         if (prevClasses === "lead purple-circle-container bluebtn") {
-          setLogoLeads(`🎶 PLAYING: ${musicList[trackIndex].name} by ${musicList[trackIndex].artist}`);
-          // console.log(logoLeads)
-          return "leadShowcase purple-circle-container";
+          setLogoLeads(`🎶 PLAYING: ${musicList[trackIndex].name}!`);
+          // console.log(logoLeads)by ${musicList[trackIndex].artist}
+          return "leadShowcase purple-circle-container bluebtn";
         }
-        // if (prevClasses) {
-        // setLogoLeads(`🎶 ${musicList[trackIndex].artist} Playlist`);
-        // console.log(logoLeads)
-        // return 'leadShowcase, bluebtn'
-        // }
+        if (prevClasses === "leadShowcase purple-circle-container bluebtn") {
+        setLogoLeads(`🎶MUSIC FROM: ${musicList[trackIndex].artist} Playlist`);
+        console.log(logoLeads)
+        return 'leadShowcase, bluebtn dark-glow'
+        }
         else {
-          setLogoLeads('🎶MELODY DREAMS🎶');
+          setLogoLeads('🎶Melody Dreams Media🎶');
           // console.log(logoLeads)
           return "lead purple-circle-container bluebtn";
         }
@@ -143,17 +143,18 @@ const Landing = () => {
     return () => clearInterval(intervalId);
   }, [trackIndex]);
 
-  const updateInfoCard = (prevClasses) => {
+  const updateInfoCard = () => {
     setDynamicContents((prevClasses) => {
+      setTotalDuration(convertTime(currentTrack.duration))
       if (prevClasses === "dark-glow bluebtn box-shadow") {
         setDynamicMessage(`🎶NOW PLAYING: ${musicList[trackIndex].name} by ${musicList[trackIndex].artist}🎶`)
         prevClasses = "dark-glow bluebtn box-shadow"
         return "leadShowcase bluebtn dark-glow";
       }
-      setTotalDuration(convertTime(currentTrack.duration))
+      console.log(dynamicMessage)
       if (prevClasses) {
-        setCardClass("leadShowcase purple-circle-container bluebtn");
         setDynamicMessage(`Time Remaining: ${totalDuration}`)
+        setCardClass("leadShowcase purple-circle-container bluebtn");
       }
       if (prevClasses) {
         setDynamicMessage(`Music from: ${musicList[trackIndex].artist} Playlist`)
@@ -292,7 +293,7 @@ const Landing = () => {
     isPlaying ? pauseTrack() : playTrack();
   }
 
-  function playTrack() {
+  const playTrack = () => {
     currentTrack.play();
     setTrackArt('rotate')
     setIsPlaying(true);
@@ -300,7 +301,7 @@ const Landing = () => {
     setPlayPauseBtn('⏸');
   }
 
-  function pauseTrack() {
+  const pauseTrack = () => {
     clearInterval(updateInterval);
     currentTrack.pause();
     setIsPlaying(false);
@@ -308,7 +309,7 @@ const Landing = () => {
   }
 
 
-  function stopTrack() {
+  const stopTrack = () => {
     clearInterval(updateInterval);
     currentTrack.pause();
     currentTrack.currentTime = 0;
@@ -318,7 +319,7 @@ const Landing = () => {
     reset()
   }
 
-  function nextTrack() {
+  const nextTrack = () => {
     if (trackIndex < musicList.length - 1 && !isRandom) {
       setTrackIndex(trackIndex + 1);
     } else if (isRandom) {
@@ -332,7 +333,7 @@ const Landing = () => {
     }
   }
 
-  function prevTrack() {
+  const prevTrack = () => {
     setTrackIndex(trackIndex > 0 ? trackIndex - 1 : musicList.length - 1);
     loadTrack(trackIndex);
     playTrack();
@@ -350,20 +351,6 @@ const Landing = () => {
     return setVolumePointValue(volumeSlider / 100);
   }
 
-
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/api/users',
-      { withCredentials: true })
-      .then(res => {
-        // setUser(res.data)
-        console.log('🚀🚀🚀', res.data)
-      })
-      .catch(err => {
-        console.log('🔭🎡🎡', err)
-      });
-  }, []);
-
   const landingHover = (e) => {
 
     if (e.target.innerText === '🎶MELODY DREAMS🎶') {
@@ -378,7 +365,7 @@ const Landing = () => {
   }
   return (
     <section className="landing" style={{ height: '' }}>
-      {/* {user ? */}
+      {user ?
       <div className="profilecontainer profileCoverShowcase">
         <div className="main-container" >
           <div className="profileShowcase">
@@ -474,7 +461,8 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      {/* : <p>Page Loading!!!</p>} */}
+      :<p>Page Loading!!!</p>
+    }
     </section>
   );
 }
