@@ -10,9 +10,10 @@ import { useNavigate } from 'react-router-dom';
 const AddSong = ({ onUpload }) => {
     const [placeholderSongTitle, setPlaceholderSongTitle] = useState('🎺 Please Enter Song Title');
     const [placeholderSongOwner, setPlaceholderSongOwner] = useState('Artist 🎙');
-    const [placeholderSongImage, setPlaceholderSongImage] = useState('Profile Image');
+    const [placeholderSongImage, setPlaceholderSongImage] = useState('Track Image 📷');
     const [placeholderSongDescription, setPlaceholderSongDescription] = useState('Please Describe Your Song!');
-    const [statusMsg, setStatusMsg] = useState('Make Private');
+    const [statusMsg, setStatusMsg] = useState('Make Track Private');
+    const [statusClass, setStatusClass] = useState("bluebtn leadShowcase dark-card-cover dark-glow")
     const [formData, setFormData] = useState({});
     const [mp3Data, setMp3Data] = useState();
     const navigate = useNavigate();
@@ -75,6 +76,12 @@ const AddSong = ({ onUpload }) => {
         else {
             setPlaceholderSongOwner('🎶 Artist 🎙 🎧')
         }
+        if (e.target.innerText === 'Track Image 📷') {
+            setPlaceholderSongImage('📷 Please Enter Track Image!')
+        }
+        else {
+            setPlaceholderSongImage(' Track Image 📷')
+        }
         if (e.target.innerText === '🎶 Song Description 🎧') {
             setPlaceholderSongDescription('🎶 Please Describe Your Song! 🎧')
         }
@@ -87,11 +94,11 @@ const AddSong = ({ onUpload }) => {
             <div className="profilecontainer profileCoverShowcase">
                 <div className="profileShowcase">
                     <div className="box-shadow leadShowcase purple-circle-containe">
-                        <form className="form bluebtn box-shadow purple-circle-container" onSubmit={uploadSong}>
-                            <div className="bluebtn leadShowcase profilegrpbtns profilecontainer dark-card-cover">
-                                <label className="bluebtn dark-card-cover" htmlFor="songName">
+                        <form className="form bluebtn box-shadow profilecontainer" onSubmit={uploadSong}>
+                            <div className="bluebtn leadShowcase profilecontainer dark-card-cove">
+                                <label className="bluebtn dark-card-cover purple-circle-container" htmlFor="songName">
                                     <p className="leadShowcas purple-circle-container">
-                                        <Link to="/AddSong" className="dark-glow leadShowcase dark-profile-overlay" onMouseEnter={(e) => placeholderhover(e)}>
+                                        <Link to="/AddSong" className="dark-glow leadShowcase dark-profile-overlay dar-glow" onMouseEnter={(e) => placeholderhover(e)}>
                                             {placeholderSongTitle}
                                         </Link>
                                     </p>
@@ -104,8 +111,8 @@ const AddSong = ({ onUpload }) => {
                                     onChange={(e) => setFormData({ ...formData, songName: e.target.value })}
                                 />
                             </div>
-                            <div className="profilecontainer purple-circle-container form-group padding">
-                                <div className="purple-circle-container" htmlFor="songArtist">
+                            <div className="profilecontainer purple-circle-container form-group lead">
+                                <label className="purple-circle-containr" htmlFor="songArtist">
                                     <p className="leadShowcase dark-card-cover purple-circle-container ">
                                         <Link to="/AddSong" className="leadShowcase bluebtn " onMouseEnter={(e) => placeholderhover(e)}>
                                             {placeholderSongOwner}
@@ -118,13 +125,13 @@ const AddSong = ({ onUpload }) => {
                                         value={formData.songArtst || ''}
                                         onChange={(e) => setFormData({ ...formData, songArtst: e.target.value })}
                                     />
-                                </div>
+                                </label>
                             </div>
 
                             <div className="profileTitle leadShowcase profilegrpbt profilecontainer dark-card-cover dark-overlay purple-circle-container form-group">
-                                <label className="bluebtn dark-card-cover" htmlFor="songImage">
-                                    <p className="leadShowcas purple-circle-container padding">
-                                        <Link to="/AddSong" className="bluebtn leadShowcase dark-profile-overla dark-card-cove" onMouseEnter={(e) => placeholderhover(e)}>
+                                <label className="dark-glow bluebtn dark-card-cover" htmlFor="songImage">
+                                    <p className="purple-circle-container padding">
+                                        <Link to="/AddSong" className="bluebtn leadShowcase dark-profile-overla dark-card-cover" onMouseEnter={(e) => placeholderhover(e)}>
                                             {placeholderSongImage}
                                         </Link>
                                     </p>
@@ -140,7 +147,7 @@ const AddSong = ({ onUpload }) => {
 
                             <div className="profilegrpbt form-group box-shadow purple-circle-container profilecontainer">
                                 <div className='dark-glow leadShowcase'>
-                                    <label className="bluebtn purple-circle-container" htmlFor="description">
+                                    <label className="bluebtn dark-glow purple-circle-container" htmlFor="description">
                                         <p className="purple-circle-container">
                                             <Link to="/AddSong" className="dark-glow dark-card-cover lead" onMouseEnter={(e) => placeholderhover(e)}>
                                                 {placeholderSongDescription}
@@ -160,32 +167,36 @@ const AddSong = ({ onUpload }) => {
                                     />
 
                                     <div className=" dark-overlay purple-circle-container form-group">
-                                        <p className="leadShowcase purple-circle-container dark-card-cover dark-overlay">
+                                        <p className="leadShowcase dark-glow purple-circle-container dark-card-cover dark-overlay">
                                             <input className="textShowcase bluebtn" type="file" accept="audio/mp3" onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
                                         </p>
-                                        <p className="textShowcase purple-circle-container dark-card-cover">
-                                            <label className="bluebtn leadShowcase dark-card-cover dark-glow" htmlFor="description" style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', fontSize: '16px' }}>
-                                                {statusMsg}
+                                        <div className=" purple-circle-container dark-card-cover dark-glo">
+                                            <label className="bluebtn dark-glow leadShowcase dark-card-cover" htmlFor="description" >
+                                                <div className={statusClass}style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', fontSize: '16px' }}>
+                                                    <p className="textShowcase dark-card-cover dark-overly">{statusMsg}</p>
 
-                                                <input
-                                                    style={{ cursor: 'pointer' }}
-                                                    type="checkbox"
-                                                    checked={formData.isPrivate || false} // Assuming isPrivate is a boolean
-                                                    onChange={
-                                                        (e) => {
-                                                            setFormData({ ...formData, isPrivate: e.target.checked })
-                                                            {
-                                                                if (statusMsg === 'Make Private') {
-                                                                    setStatusMsg('Make Public')
-                                                                } else {
-                                                                    setStatusMsg('Make Private')
+                                                    <input
+                                                        style={{ cursor: 'pointer' }}
+                                                        type="checkbox"
+                                                        checked={formData.isPrivate || false}
+                                                        onChange={
+                                                            (e) => {
+                                                                setFormData({ ...formData, isPrivate: e.target.checked })
+                                                                {
+                                                                    if (statusMsg === 'Make Track Private') {
+                                                                        setStatusMsg('Make Track Public')
+                                                                        setStatusClass('leadShowcase bluebtn dark-card-cover')
+                                                                    } else {
+                                                                        setStatusMsg('Make Track Private')
+                                                                        setStatusClass('my-1 bluebtn leadShowcase dark-card-cover dark-glow')
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                />
+                                                    />
+                                                </div>
                                             </label>
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
