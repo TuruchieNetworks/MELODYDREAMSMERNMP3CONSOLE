@@ -365,7 +365,7 @@ const Landing = () => {
   }
   return (
     <section className="landing" style={{ height: '' }}>
-      {user ?
+      {/* {user ? */}
       <div className="profilecontainer profileCoverShowcase">
         <div className="main-container" >
           <div className="profileShowcase">
@@ -461,8 +461,8 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      :<p>Page Loading!!!</p>
-    }
+      {/* :<p>Page Loading!!!</p>
+    } */}
     </section>
   );
 }
