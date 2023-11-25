@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Landing = () => {
+const Landing = (props) => {
   const [nowPlaying, setNowPlaying] = useState('PLAYING: x of y');
   const [trackArt, setTrackArt] = useState({ trackArt: 'track-art' });
   const [trackName, setTrackName] = useState('track-name');
@@ -60,6 +60,8 @@ const Landing = () => {
       .then(res => {
         setUser(res.data.users)
         console.log('🚀🚀🚀', res.data.users)
+        console.log('🚀🚀🚀', res.config.xsrfCookieName
+        )
       })
       .catch(err => {
         console.log('🔭🎡🎡', err)
@@ -137,7 +139,7 @@ const Landing = () => {
         }
       })
       updateInfoCard()
-    }, 1000);
+      }, 1000);
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
@@ -363,9 +365,10 @@ const Landing = () => {
     }
     return e
   }
+  
   return (
     <section className="landing" style={{ height: '' }}>
-      {user ?
+      {/* {user ? */}
       <div className="profilecontainer profileCoverShowcase">
         <div className="main-container" >
           <div className="profileShowcase">
@@ -461,8 +464,8 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      :<p>Page Loading!!!</p>
-    }
+    {/* //   :<p>Page Loading!!!</p> */}
+    {/* // } */}
     </section>
   );
 }

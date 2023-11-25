@@ -7,7 +7,7 @@ const SECRET_KEY = process.env.SECRET_KEY;
 // AUTHENTICATE
 module.exports.authenticate = (req, res, next) => {
     const token = req.cookies.usertoken;
-
+    // const tokenHeader = req.header('x-auth-token');
     if (!token) {
         return res.status(401).json({ verified: false, message: 'No token found' });
     }

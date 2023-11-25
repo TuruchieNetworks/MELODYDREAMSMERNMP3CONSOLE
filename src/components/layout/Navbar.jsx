@@ -15,7 +15,7 @@ const Navbar = () => {
       setIsNavOpen(window.innerWidth <= 500);
 
       // Hide navigation items when screen width is less than or equal to 650 pixels
-      setNavPhone({ display: window.innerWidth <= 750 ? 'none' : 'block' });
+      setNavPhone({ display: window.innerWidth <= 850 ? 'none' : 'block' });
     };
 
     // Add a resize event listener to check for screen width changes
@@ -55,7 +55,7 @@ const Navbar = () => {
       </ul>
 
       {/* Logout link */}
-      <h1 style={navPhone}><Link to="/Login"><i className="fas fa-sign-out-alt">Logout</i></Link></h1>
+      <h1 style={navPhone}className='leadShowcase'><Link to="/Login"><i className="fas fa-sign-out-alt">Logout</i></Link></h1>
     </nav>
   );
 }
