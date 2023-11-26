@@ -194,10 +194,10 @@ const AddSong = ({ onUpload }) => {
                                             <input className="textShowcase bluebtn"type="file" accept="audio/mp3"onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
                                         </p>
                                         <label className="dark-overla leaShowcase bluebtn"htmlFor="description" >
-                                            <div className="textShowcase dark-card-cover dark-overly" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                            <div className="textShowcase dark-card-cover dark-overly bluebtn" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                                                 <p className={statusClass}>{statusMsg}</p>
                                             </div> 
-                                                <input className={statusClass}
+                                                <input className={`${statusClass} bluebtn`}
                                                     style={{ cursor: 'pointer', fontSize:'18px',height:'15px' }}
                                                     type="checkbox"
                                                     checked={formData.isPrivate || false}
@@ -207,11 +207,11 @@ const AddSong = ({ onUpload }) => {
                                                             {
                                                                 if (statusMsg=== 'Make Track Private') {
                                                                     setStatusMsg('Make Track Public')
-                                                                    setStatusClass('leadShowcase blue dark-card-cover')
+                                                                    setStatusClass('leadShowcase dojoCard dark-card-cover')
                                                                     setSongStatus('Track Private!')
                                                                 } else {
                                                                     setStatusMsg('Make Track Private')
-                                                                    setStatusClass('my-1 bluebt dark-overlay dark-card-cover dark-glow')
+                                                                    setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow')
                                                                     setSongStatus('Track is public!')
                                                                     }
                                                                 }
@@ -222,12 +222,16 @@ const AddSong = ({ onUpload }) => {
                                     </div>
                                 </div>
 
-                                <div className="bluebtn margin-big">
-                                    <p className="leadShowcas purple-circle-container ">
-                                        <button className="bluebtn leadShowcas dark-profile-overlay dark-card-cover my-1">
-                                            <p className="bluebtn lead">Upload Song!</p>
-                                        </button>
-                                    </p>
+                                <div className="purple-circle-container form-group">
+                                    <div className="dark-card-cover dark-overlay bluebtn">
+                                        <div className='purple-circle-container'>
+                                            <p className="bluebtn dark-overlay dark-glow">
+                                                <button className=" dark-card-cover my-1 bluebtn">
+                                                    <p className="lead dark-card-cover dark-overlay textShowcase">Upload New Song!</p>
+                                                </button>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
                             
                         </form>
