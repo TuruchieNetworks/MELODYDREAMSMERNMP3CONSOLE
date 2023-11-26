@@ -223,11 +223,11 @@ const AddSong = ({ onUpload }) => {
                                 </div>
 
                                 <div className="purple-circle-container form-group">
-                                    <div className="dark-card-cover dark-overlay bluebtn">
+                                    <div className="dark-card-cover dark-overlay dark-glow">
                                         <div className='purple-circle-container'>
                                             <p className="bluebtn dark-overlay dark-glow">
-                                                <button className=" dark-card-cover my-1 bluebtn">
-                                                    <p className="lead dark-card-cover dark-overlay textShowcase">Upload New Song!</p>
+                                                <button className=" dark-card-cover my-1 bluebtn purple-circle-container">
+                                                    <p className="lead dark-card-cover dark-overlay">Upload New Song!</p>
                                                 </button>
                                             </p>
                                         </div>
