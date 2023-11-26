@@ -20,8 +20,9 @@ const AddSong = ({ onUpload }) => {
         songArtst: '',
         songDescription: '',
         songImage: null,
+        isPrivate: false,
     });
-
+    const [privateTrackStatus, setPrivateTrackStatus] = useState(false)
     const [mp3Data, setMp3Data] = useState();
     const navigate = useNavigate();
 
@@ -96,6 +97,21 @@ const AddSong = ({ onUpload }) => {
         }
         else {
             setPlaceholderSongDescription('🎶 Song Description 🎧')
+        }
+    }
+    const changeStatus = (e) => {if (formData.isPrivate === false ) {
+        setStatusMsg('Make Track Public')
+        setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
+        setSongStatus('Selected Track Will Be Private!')
+        setPrivateTrackStatus(true)
+        setFormData({ ...formData, isPrivate: true })
+        
+        } else {
+        setStatusMsg('Make Track Private')
+        setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow leadShowcase')
+        setSongStatus('Selected Track Will Be Public!')
+        setPrivateTrackStatus(false)
+        setFormData({ ...formData, isPrivate: false})
         }
     }
     return (
@@ -186,47 +202,50 @@ const AddSong = ({ onUpload }) => {
                                         <label className=""htmlFor="description">
                                             <p className="purple-circle-container">
                                                 <Link to="/AddSong"className="dark-glow dark-card-cover lead"onMouseEnter={(e) =>placeholderhover(e)}>
-                                                    <p className=''>{songStatus}</p>
+                                                    <p className=''onClick={(e)=>changeStatus(e)}>{songStatus}</p>
                                                 </Link>
                                             </p>
                                         </label>
                                         <p className="leadShowcase dark-card-cover">
                                             <input className="textShowcase bluebtn"type="file" accept="audio/mp3"onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
                                         </p>
-                                        <label className="dark-overla leaShowcase bluebtn"htmlFor="description" >
-                                            <div className="textShowcase dark-card-cover dark-overly bluebtn" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                                                <p className={statusClass}>{statusMsg}</p>
+                                        <label className="dark-overla leaShowcase bluebtn purple-circle-container"htmlFor="isPrivate" >
+                                            <div className="textShowcase dark-card-cover dark-overly bluebtn" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}onClick={(e)=>changeStatus(e)}>
+                                                <p className={statusClass} >{statusMsg}</p>
                                             </div> 
-                                                <input className={`${statusClass} bluebtn`}
+                                        </label>
+                                                <input className={`${statusClass} leadShowcase bluebtn`}
                                                     style={{ cursor: 'pointer', fontSize:'18px',height:'15px' }}
                                                     type="checkbox"
-                                                    checked={formData.isPrivate || false}
+                                                    checked={formData.isPrivate || privateTrackStatus}
                                                     onChange={
                                                     (e) => {
                                                             setFormData({ ...formData, isPrivate: e.target.checked })
-                                                            {
-                                                                if (statusMsg=== 'Make Track Private') {
-                                                                    setStatusMsg('Make Track Public')
-                                                                    setStatusClass('leadShowcase dojoCard dark-card-cover')
+                                                                { if (formData.isPrivate === true) {
+                                                                    setStatusMsg('Selected Track Will Be Public')
+                                                                    setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
                                                                     setSongStatus('Track Private!')
-                                                                } else {
-                                                                    setStatusMsg('Make Track Private')
-                                                                    setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow')
+                                                                    setPrivateTrackStatus(false)
+                                                                    } else {
+                                                                    setStatusMsg('Selected Track Will Be Private')
+                                                                    setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow purple-circle-container')
                                                                     setSongStatus('Track is public!')
+                                                                    setPrivateTrackStatus(true)
                                                                     }
                                                                 }
                                                             }
                                                         }
-                                                /> </label>
+                                                    value={formData.isPrivate}
+                                                /> 
                                     </div>
                                     </div>
                                 </div>
 
                                 <div className="purple-circle-container form-group">
-                                    <div className="dark-card-cover dark-overlay dark-glow">
+                                    <div className="dark-card-cover dark-overlay dark-glow lead">
                                         <div className='purple-circle-container'>
                                             <p className="bluebtn dark-overlay dark-glow">
-                                                <button className=" dark-card-cover my-1 bluebtn purple-circle-container">
+                                                <button className="leadShowcase dark-card-cover my-1 bluebtn purple-circle-container">
                                                     <p className="lead dark-card-cover dark-overlay">Upload New Song!</p>
                                                 </button>
                                             </p>

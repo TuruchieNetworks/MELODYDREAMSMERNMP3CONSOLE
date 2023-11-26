@@ -21,7 +21,7 @@ app.use(
   cors({
     credentials: true,
     origin: 'http://localhost:3000',
-    exposedHeaders: ['Access-Control-Allow-Origin'],
+    exposedHeaders: ['Access-Control-Allow-Origin']
   })
 );
 
@@ -35,7 +35,6 @@ router.post('/songs', authenticate, upload.single('file'), songController.create
 
 app.use('/api', router); 
 
-require('./config/mongoose.config');
 require('./config/mongoose.config');
 
 app.listen(PORT, () => console.log(` >>>📡 API SERVICE ANNOUNCEMENT: 🎡🎠🎡 Server is up and running on port: ${PORT} and listening for REQuests to RESpond to 💻💻💻 >>>`));
