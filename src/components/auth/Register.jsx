@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useNavigate  } from 'react';
+import { Link} from 'react-router-dom';
 // import { setAlert } from '../../actions/alert';
 // import propTypes from 'prop-types';
 
@@ -64,7 +64,7 @@ const Register = ({ setAlert }) => {
       newUser, {withCredentials: true})
         .then(res => {
           console.log('✔✔✔👌', res)
-          navigate('/');
+          navigate('/Landing');
         })
         .catch(err => {
           console.log('🎡🎡🔭', err)

@@ -20,36 +20,75 @@ const AddSong = ({ onUpload }) => {
         songArtst: '',
         songDescription: '',
         songImage: null,
+        songData: null,
         isPrivate: false,
+        genre: '',
     });
     const [privateTrackStatus, setPrivateTrackStatus] = useState(false)
     const [mp3Data, setMp3Data] = useState();
     const navigate = useNavigate();
+    const [userToken, setUserToken] = useState("");
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/users',
+            { withCredentials: true })
+            .then(res => {
+                setUser(res.data.users);
+                setUserToken(res.config.xsrfCookieName);
+                console.log('🚀🚀🚀', res.data.users)
+                console.log('🚀🚀🚀', res.config);
+                console.log('🚀🚀🚀', res.config.xsrfCookieName);
+            })
+            .catch(err => {
+                console.log('🔭🎡🎡 Error uploading song: ', err)
+            });
+    }, []);
 
     const uploadSong = async (e) => {
         e.preventDefault();
 
         const { songName, songArtst, songDescription, songImage } = formData;
 
-        const createSongInput = {
-            songName,
-            songArtst,
-            songDescription,
-            songImage: songImage ? songImage.filePath : '',
-            like: 0,
-            isPrivate: false,
-            comments: '',
-        };
+        const formDataToSend = new FormData();
+        formDataToSend.append('songName', songName);
+        formDataToSend.append('songArtst', songArtst);
+        formDataToSend.append('songDescription', songDescription);
+        formDataToSend.append('isPrivate', formData.isPrivate);
+        formDataToSend.append('genre', formData.genre);
+
+        if (songImage) {
+            formDataToSend.append('songImage.filePath', songImage.filePath);
+            formDataToSend.append('songImage.imageData', songImage.imageData);
+        }
+
+        formDataToSend.append('songData', mp3Data);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/songs', createSongInput);
+            const response = await axios.post('http://localhost:8000/api/songs', formDataToSend, {
+                withCredentials: true,
+                headers: {
+                    'Authorization': `Bearer ${userToken}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        
             console.log('✔✔✔👌', response.data);
-            // navigate('/');
+        
+            // Clear the form after successful upload
+            setFormData({
+                songName: '',
+                songArtst: '',
+                songDescription: '',
+                songImage: null,
+                songData: null,
+                isPrivate: false,
+                genre:'',
+            });
+            navigate('/Landing');
         } catch (error) {
             console.log('🎡🎡🔭', error);
         }
     };
-
 
     // const uploadSong = async (e) => {
     //     e.preventDefault();
@@ -99,19 +138,20 @@ const AddSong = ({ onUpload }) => {
             setPlaceholderSongDescription('🎶 Song Description 🎧')
         }
     }
-    const changeStatus = (e) => {if (formData.isPrivate === false ) {
-        setStatusMsg('Make Track Public')
-        setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
-        setSongStatus('Selected Track Will Be Private!')
-        setPrivateTrackStatus(true)
-        setFormData({ ...formData, isPrivate: true })
-        
+    const changeStatus = (e) => {
+        if (formData.isPrivate === false) {
+            setStatusMsg('Make Track Public')
+            setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
+            setSongStatus('Selected Track Will Be Private!')
+            setPrivateTrackStatus(true)
+            setFormData({ ...formData, isPrivate: true })
+
         } else {
-        setStatusMsg('Make Track Private')
-        setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow leadShowcase')
-        setSongStatus('Selected Track Will Be Public!')
-        setPrivateTrackStatus(false)
-        setFormData({ ...formData, isPrivate: false})
+            setStatusMsg('Make Track Private')
+            setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow leadShowcase')
+            setSongStatus('Selected Track Will Be Public!')
+            setPrivateTrackStatus(false)
+            setFormData({ ...formData, isPrivate: false })
         }
     }
     return (
@@ -119,7 +159,7 @@ const AddSong = ({ onUpload }) => {
             <div className="profilecontainer profileCoverShowcase">
                 <div className="profileShowcase">
                     <div className="box-shadow leadShowcase purple-circle-containe">
-                        <form className="form bluebtn box-shadow profilecontainer" onSubmit={uploadSong}>
+                        <form className="form bluebtn box-shadow profilecontainer" onSubmit={uploadSong} encType="multipart/form-data">
                             <div className="bluebtn leadShowcas profilecontainer dark-card-cover form-group">
                                 <label className="bluebtn purple-circle-container" htmlFor="songName">
                                     <p className="dark-card-cover dark-overlay purple-circle-container">
@@ -139,7 +179,6 @@ const AddSong = ({ onUpload }) => {
                             <div className="profilecontainer purple-circle-container form-group ">
                                 <div className="purple-circle-container bluebtn lead">
                                     <label className="purple-circle-container dark-card-cover" htmlFor="songArtist">
-                                    
                                         <p className="dark-card-cover purple-circle-container">
                                             <Link to="/AddSong" className=" bluebtn dark-card-cover dark-overlay" onMouseEnter={(e) => placeholderhover(e)}>
                                                 {placeholderSongOwner}
@@ -199,60 +238,61 @@ const AddSong = ({ onUpload }) => {
                                 </div>
                                 <div className="purple-circle-container form-group">
                                     <div className="dark-card-cover bluebt leadShowcase">
-                                        <label className=""htmlFor="description">
+                                        <label className="" htmlFor="description">
                                             <p className="purple-circle-container">
-                                                <Link to="/AddSong"className="dark-glow dark-card-cover lead"onMouseEnter={(e) =>placeholderhover(e)}>
-                                                    <p className=''onClick={(e)=>changeStatus(e)}>{songStatus}</p>
+                                                <Link to="/AddSong" className="dark-glow dark-card-cover lead" onMouseEnter={(e) => placeholderhover(e)}>
+                                                    <p className='' onClick={(e) => changeStatus(e)}>{songStatus}</p>
                                                 </Link>
                                             </p>
                                         </label>
                                         <p className="leadShowcase dark-card-cover">
-                                            <input className="textShowcase bluebtn"type="file" accept="audio/mp3"onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
+                                            <input className="textShowcase bluebtn" type="file" accept="audio/mp3" onChange={(e) => setMp3Data(e.target.files[0])} style={{ cursor: 'pointer' }} />
                                         </p>
-                                        <label className="dark-overla leaShowcase bluebtn purple-circle-container"htmlFor="isPrivate" >
-                                            <div className="textShowcase dark-card-cover dark-overly bluebtn" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}onClick={(e)=>changeStatus(e)}>
+                                        <label className="dark-overla leaShowcase bluebtn purple-circle-container" htmlFor="isPrivate" >
+                                            <div className="textShowcase dark-card-cover dark-overly bluebtn" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} onClick={(e) => changeStatus(e)}>
                                                 <p className={statusClass} >{statusMsg}</p>
-                                            </div> 
+                                            </div>
                                         </label>
-                                                <input className={`${statusClass} leadShowcase bluebtn`}
-                                                    style={{ cursor: 'pointer', fontSize:'18px',height:'15px' }}
-                                                    type="checkbox"
-                                                    checked={formData.isPrivate || privateTrackStatus}
-                                                    onChange={
-                                                    (e) => {
-                                                            setFormData({ ...formData, isPrivate: e.target.checked })
-                                                                { if (formData.isPrivate === true) {
-                                                                    setStatusMsg('Selected Track Will Be Public')
-                                                                    setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
-                                                                    setSongStatus('Track Private!')
-                                                                    setPrivateTrackStatus(false)
-                                                                    } else {
-                                                                    setStatusMsg('Selected Track Will Be Private')
-                                                                    setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow purple-circle-container')
-                                                                    setSongStatus('Track is public!')
-                                                                    setPrivateTrackStatus(true)
-                                                                    }
-                                                                }
-                                                            }
+                                        <input className={`${statusClass} leadShowcase bluebtn`}
+                                            style={{ cursor: 'pointer', fontSize: '18px', height: '15px' }}
+                                            type="checkbox"
+                                            checked={formData.isPrivate || privateTrackStatus}
+                                            onChange={
+                                                (e) => {
+                                                    setFormData({ ...formData, isPrivate: e.target.checked })
+                                                    {
+                                                        if (formData.isPrivate === true) {
+                                                            setStatusMsg('Selected Track Will Be Public')
+                                                            setStatusClass('leadShowcase dojoCard dark-card-cover purple-circle-container')
+                                                            setSongStatus('Track Private!')
+                                                            setPrivateTrackStatus(false)
+                                                        } else {
+                                                            setStatusMsg('Selected Track Will Be Private')
+                                                            setStatusClass('lead my-1 dark-overlay dark-card-cover dark-glow purple-circle-container')
+                                                            setSongStatus('Track is public!')
+                                                            setPrivateTrackStatus(true)
                                                         }
-                                                    value={formData.isPrivate}
-                                                /> 
-                                    </div>
+                                                    }
+                                                }
+                                            }
+                                            value={formData.isPrivate}
+                                        />
                                     </div>
                                 </div>
+                            </div>
 
-                                <div className="purple-circle-container form-group">
-                                    <div className="dark-card-cover dark-overlay dark-glow lead">
-                                        <div className='purple-circle-container'>
-                                            <p className="bluebtn dark-overlay dark-glow">
-                                                <button className="leadShowcase dark-card-cover my-1 bluebtn purple-circle-container">
-                                                    <p className="lead dark-card-cover dark-overlay">Upload New Song!</p>
-                                                </button>
-                                            </p>
-                                        </div>
+                            <div className="purple-circle-container form-group">
+                                <div className="dark-card-cover dark-overlay dark-glow lead">
+                                    <div className='purple-circle-container'>
+                                        <p className="bluebtn dark-overlay dark-glow">
+                                            <button className="leadShowcase dark-card-cover my-1 bluebtn purple-circle-container">
+                                                <p className="lead dark-card-cover dark-overlay">Upload New Song!</p>
+                                            </button>
+                                        </p>
                                     </div>
                                 </div>
-                            
+                            </div>
+
                         </form>
                     </div>
                 </div>
@@ -260,5 +300,4 @@ const AddSong = ({ onUpload }) => {
         </div>
     );
 };
-
 export default AddSong;
