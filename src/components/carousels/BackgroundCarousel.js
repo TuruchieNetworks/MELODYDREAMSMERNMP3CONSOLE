@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Biography from '../layout/Bio';
+import Biography from '../../../../../MELODYDREAMSMERNMP3CONSOLE-master/CLIENTS/src/components/layout/Bio';
 import ImageCarousel from './ImageCarousel';
 import ImageUtils from '../hooks/ImageUtils';
 import useCarouselImages from '../hooks/UseCarouselImages';
-import MusicUtils from '../hooks/MusicUtils';
 
 const BackgroundCarousel = () => {
-  const musicUtils = new MusicUtils();
   const imageUtilities = new ImageUtils();
   const images = imageUtilities.getAllCarouselImages();
   const { idx, changeImage } = useCarouselImages(images);

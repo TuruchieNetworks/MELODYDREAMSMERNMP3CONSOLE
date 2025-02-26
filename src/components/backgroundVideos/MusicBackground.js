@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import '../../styles/VideoBackground.css';
-import Music from '../auth/Music';
+import Music from '../../../../../MELODYDREAMSMERNMP3CONSOLE-master/CLIENTS/src/components/auth/Music';
 import ImageUtils from '../hooks/ImageUtils';
 import UseVideoBackground from '../hooks/UseVideoBackground';
 import useBackgroundImages from '../hooks/UseBackgroundImages';

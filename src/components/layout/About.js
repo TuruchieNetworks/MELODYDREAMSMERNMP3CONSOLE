@@ -4,11 +4,11 @@ import '../../App.css';
 import Bio from './Bio';
 import HeaderLinks from '../headers/HeaderLinks';
 import ImageCarousel from '../carousels/ImageCarousel';
-import ImageUtils from '../hooks/ImageUtils';
 import UseVideoBackground from '../hooks/UseVideoBackground';
 import useBackgroundImages from '../hooks/UseBackgroundImages';
 import useCarouselImages from '../hooks/UseCarouselImages';
 import MusicUtils from '../hooks/MusicUtils';
+import ImageUtils from '../hooks/ImageUtils';
 
 const About = () => {
     const musicUtils = new MusicUtils();
@@ -18,7 +18,6 @@ const About = () => {
     const logo_scene = videosList[0].video;
     const { videoRef } = UseVideoBackground();
     const { idx, changeImage } = useCarouselImages(images);
-
 
     return (
         <div

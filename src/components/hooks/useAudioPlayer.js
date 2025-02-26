@@ -132,12 +132,12 @@ const useAudioPlayer = () => {
   }
 
   const repeatTrack = () => {
+    setIsRepeat(!isRepeat);
     currentTrack.addEventListener('ended', mountRepeatTrack);
   }
 
   const mountRepeatTrack = () => {
     currentTrack.currentTime = 0; // No need to change, just restart the current track
-    setIsRepeat(!isRepeat);
   }
 
   const playpauseTrack = () => {
@@ -171,20 +171,23 @@ const useAudioPlayer = () => {
     reset();
   }
 
-  const nextTrack = () => {
-    if (trackIndex < musicList.length - 1 && !isRandom && !isRepeat) {
+  const nextTrack = () => { 
+    if (isRepeat) {
+      currentTrack.currentTime = 0;
+      playTrack();
+    } else 
+    if (trackIndex < musicList.length - 1 && !isRandom) {
       setTrackIndex(trackIndex + 1);
       setCurrentIndex(trackIndex + 1);
     } else if (isRandom) {
       setRandomIndex(Math.floor(Math.random() * musicList.length));
       setTrackIndex(randomIndex);
-    } else if (isRepeat) {
-      mountRepeatTrack();
-    } else {
+    }
+    else {
       setTrackIndex(0);  // If it's the last track, go back to the first one
     }
 
-    playpauseTrack();  // Start playing the track
+    //playpauseTrack();  // Start playing the track
   };
 
   const prevTrack = () => {
